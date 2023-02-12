@@ -34,6 +34,7 @@ public:
     std::vector<std::string> get_inventory() {
         return inventory;
     }
+
 private:
     int score;
     int health;
@@ -41,12 +42,6 @@ private:
 };
 
 class View
-{
-public:
-private:
-};
-
-class Controller
 {
 public:
     void display_score(int score) {
@@ -81,6 +76,10 @@ public:
             std::cout << "Sorry, you lost the encounter." << std::endl;
         }
     }
+};
+
+class Controller
+{
 };
 
 int main()

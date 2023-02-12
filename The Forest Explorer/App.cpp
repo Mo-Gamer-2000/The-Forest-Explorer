@@ -1,25 +1,16 @@
 #include <iostream>
 #include <string>
-#include <ctime>
 #include <vector>
+#include <ctime>
 #include <cstdlib>
 
 using namespace std;
 
-class Model
-{
+class Model {
 public:
-    Model() : score(0), health(100), inventory() {}
+    Model() : score(0), health(100) {}
 
-    void add_points(int points) {
-        score += points;
-    }
-
-    void take_damage(int damage) {
-        health -= damage;
-    }
-
-    void add_to_inventory(std::string item) {
+    void add_to_inventory(string item) {
         inventory.push_back(item);
     }
 
@@ -31,59 +22,104 @@ public:
         return health;
     }
 
-    std::vector<std::string> get_inventory() {
+    vector<string> get_inventory() {
         return inventory;
+    }
+
+    void update_score(int new_score) {
+        score = new_score;
+    }
+
+    void update_health(int new_health) {
+        health = new_health;
     }
 
 private:
     int score;
     int health;
-    std::vector<std::string> inventory;
+    vector<string> inventory;
 };
 
-class View
-{
+class View {
 public:
+    void display_menu() {
+        cout << "What would you like to do?" << endl;
+        cout << "1. Explore the forest" << endl;
+        cout << "2. View your stats" << endl;
+        cout << "3. Quit" << endl;
+    }
+
     void display_score(int score) {
-        std::cout << "Your current score is: " << score << std::endl;
+        cout << "Your current score is: " << score << endl;
     }
 
     void display_health(int health) {
-        std::cout << "Your current health is: " << health << std::endl;
+        cout << "Your current health is: " << health << endl;
     }
 
-    void display_inventory(std::vector<std::string> inventory) {
-        std::cout << "Your current inventory is: ";
-        for (std::string item : inventory) {
-            std::cout << item << " ";
+    void display_inventory(vector<string> inventory) {
+        cout << "Your current inventory is: ";
+        for (string item : inventory) {
+            cout << item << " ";
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 
-    void display_options() {
-        std::cout << "What would you like to do?" << std::endl;
-        std::cout << "1. Explore the forest" << std::endl;
-        std::cout << "2. View your stats" << std::endl;
-        std::cout << "3. Quit" << std::endl;
-    }
-
-    void display_encounter_result(bool win, std::string item) {
+    void display_result(bool win, string item) {
         if (win) {
-            std::cout << "Congratulations, you won the encounter!" << std::endl;
-            std::cout << "You found a " << item << "." << std::endl;
+            cout << "Congratulations, you won the encounter!" << endl;
+            cout << "You found a " << item << "." << endl;
         }
         else {
-            std::cout << "Sorry, you lost the encounter." << std::endl;
+            cout << "Sorry, you lost the encounter." << endl;
+            cout << "You lost 10 health points." << endl;
         }
     }
 };
 
-class Controller
-{
+class Controller {
+public:
+    Controller() : model(), view() {}
+
+    void play_game() {
+        while (true) {
+            view.display_menu();
+            int choice;
+            cin >> choice;
+            if (choice == 1) {
+                bool win = rand() % 2 == 0;
+                string item;
+                if (win) {
+                    item = "Apple";
+                    model.update_score(model.get_score() + 10);
+                    model.add_to_inventory(item);
+                }
+                else {
+                    item = "";
+                    model.update_health(model.get_health() - 10);
+                }
+                view.display_result(win, item);
+            }
+            else if (choice == 2) {
+                view.display_score(model.get_score());
+                view.display_health(model.get_health());
+                view.display_inventory(model.get_inventory());
+            }
+            else if (choice == 3) {
+                break;
+            }
+        }
+    }
+
+private:
+    Model model;
+    View view;
 };
 
-int main()
-{
-    cout << "Hello World!" << endl;
+int main() {
+    srand(time(0));
+    Controller controller;
+    controller.play_game();
     return 0;
 }
+

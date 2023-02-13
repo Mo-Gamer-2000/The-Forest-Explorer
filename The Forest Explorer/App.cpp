@@ -40,6 +40,40 @@ private:
     vector<string> inventory;
 };
 
+class PlayerModel : public Model {
+public:
+    PlayerModel(string name) : Model(), name(name), level(1), experience(0) {}
+
+    void set_name(string new_name) {
+        name = new_name;
+    }
+
+    string get_name() {
+        return name;
+    }
+
+    int get_level() {
+        return level;
+    }
+
+    int get_experience() {
+        return experience;
+    }
+
+    void add_experience(int new_experience) {
+        experience += new_experience;
+        if (experience >= 100) {
+            level++;
+            experience -= 100;
+        }
+    }
+
+private:
+    string name;
+    int level;
+    int experience;
+};
+
 class View {
 public:
     void display_menu() {

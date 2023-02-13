@@ -86,27 +86,37 @@ public:
             view.display_menu();
             int choice;
             cin >> choice;
-            if (choice == 1) {
-                bool win = rand() % 2 == 0;
-                string item;
-                if (win) {
-                    item = "Apple";
-                    model.update_score(model.get_score() + 10);
-                    model.add_to_inventory(item);
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid choice. Please try again and enter a number." << endl;
+            }
+            else {
+                if (choice == 1) {
+                    bool win = rand() % 2 == 0;
+                    string item;
+                    if (win) {
+                        item = "Apple";
+                        model.update_score(model.get_score() + 10);
+                        model.add_to_inventory(item);
+                    }
+                    else {
+                        item = "";
+                        model.update_health(model.get_health() - 10);
+                    }
+                    view.display_result(win, item);
+                }
+                else if (choice == 2) {
+                    view.display_score(model.get_score());
+                    view.display_health(model.get_health());
+                    view.display_inventory(model.get_inventory());
+                }
+                else if (choice == 3) {
+                    break;
                 }
                 else {
-                    item = "";
-                    model.update_health(model.get_health() - 10);
+                    cout << "Invalid choice. Please try again." << endl;
                 }
-                view.display_result(win, item);
-            }
-            else if (choice == 2) {
-                view.display_score(model.get_score());
-                view.display_health(model.get_health());
-                view.display_inventory(model.get_inventory());
-            }
-            else if (choice == 3) {
-                break;
             }
         }
     }
@@ -115,6 +125,8 @@ private:
     Model model;
     View view;
 };
+
+
 
 int main() {
     srand(time(0));
